@@ -1,8 +1,10 @@
 from pydantic import BaseModel
-from sqlmodel import Field, SQLModel, Column
+from sqlmodel import Field, SQLModel, Column, Relationship
 from sqlalchemy.dialects import postgresql as pg
 from datetime import datetime
 import uuid
+from typing import Optional
+from auth import models
 
 class Book(SQLModel, table=True):
     __tablename__ = "books"
@@ -21,6 +23,10 @@ class Book(SQLModel, table=True):
     publish_date: str
     pages: int
     language: str
+    user_id: Optional[uuid.UUID] = Field(
+        default=None,
+        foreign_key="users.id"
+    )
     created_at: str = Field(
         sa_column=Column(
             pg.TIMESTAMP,
@@ -33,6 +39,7 @@ class Book(SQLModel, table=True):
             default=datetime.utcnow()
         )
     )
+    user: Optional["models.User"] = Relationship(back_populates="books")
 
     def __repr__(self):
         return f"Book: {self.title}"
