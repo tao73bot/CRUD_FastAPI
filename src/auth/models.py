@@ -17,6 +17,12 @@ class User(SQLModel, table= True):
     username: str
     email: str
     password: str = Field(exclude=True)
+    role_name:str = Field(
+        sa_column=Column(
+            pg.VARCHAR,
+            server_default="user"
+        )
+    )
     is_varified: bool = False
     created_at: str = Field(
         sa_column=Column(

@@ -21,6 +21,7 @@ class UserService:
         user = user_data.model_dump()
         new_user = User(**user)
         new_user.password = generate_password_hash(user["password"])
+        new_user.role_name = "user"
         session.add(new_user)
         await session.commit()
         await session.refresh(new_user)
